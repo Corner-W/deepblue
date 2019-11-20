@@ -6,7 +6,8 @@ ARG MINICONDA_INSTALLER="Miniconda3-4.5.11-Linux-x86_64.sh"
 USER root
 
 # COPY pip.conf /etc/
-
+COPY tini /tmp/
+COPY bootstrap.sh /tmp/
 ENV CONDA_DIR=/opt/conda
 ENV PATH=$CONDA_DIR/bin:$PATH
 
