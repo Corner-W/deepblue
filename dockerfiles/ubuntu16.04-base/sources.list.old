@@ -1,0 +1,10 @@
+deb http://mirrors.jd.com/ubuntu/ trusty main multiverse restricted universe
+deb http://mirrors.jd.com/ubuntu/ trusty-backports main multiverse restricted universe
+deb http://mirrors.jd.com/ubuntu/ trusty-proposed main multiverse restricted universe
+deb http://mirrors.jd.com/ubuntu/ trusty-security main multiverse restricted universe
+deb http://mirrors.jd.com/ubuntu/ trusty-updates main multiverse restricted universe
+deb-src http://mirrors.jd.com/ubuntu/ trusty main multiverse restricted universe
+deb-src http://mirrors.jd.com/ubuntu/ trusty-backports main multiverse restricted universe
+deb-src http://mirrors.jd.com/ubuntu/ trusty-proposed main multiverse restricted universe
+deb-src http://mirrors.jd.com/ubuntu/ trusty-security main multiverse restricted universe
+deb-src http://mirrors.jd.com/ubuntu/ trusty-updates main multiverse restricted universe
