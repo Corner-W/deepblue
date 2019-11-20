@@ -29,3 +29,7 @@ RUN cd /tmp && \
 #     rm $MINICONDA_INSTALLER
 
 # RUN pip install pyspark==2.3.2 Numpy
+
+
+
+# ENTRYPOINT ["/bin/bash", "/tmp/bootstrap.sh"]
