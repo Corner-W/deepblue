@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    cattle.io/creator: norman
+  name: kibana-ui
+  namespace: logging
+spec:
+  rules:
+  - host: kibana.deepblueai.com
+    http:
+      paths:
+      - backend:
+          serviceName: kibana
+          servicePort: 5601
