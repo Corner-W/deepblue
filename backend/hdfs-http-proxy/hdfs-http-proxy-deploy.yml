@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hdfs-http-proxy-server
+  name: hdfs-http-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hdfs-http-proxy-server
+  template:
+    metadata:
+      labels:
+        app: hdfs-http-proxy-server
+    spec:
+      containers:
+      - env:
+        - name: JVM_OPTS
+          value: -XX:+UseG1GC -XX:+PrintGCDetails -Xmn2048m -Xms2G -Xmx4G  -XX:MetaspaceSize=256M
+            -XX:MaxMetaspaceSize=256M
+        - name: com.alibaba.nacos.naming.log.level
+          value: warn
+        - name: spring.profiles.active
+          value: test
+        image: 10.16.32.59:1180/library/hdfs-http-proxy:V20
+        imagePullPolicy: Always
+        name: hdfs-http-proxy
+        resources:
+          limits:
+            cpu: "4"
+            memory: 4000Mi
+      hostAliases:
+      - hostnames:
+        - hadoop--1.novalocal
+        ip: 10.16.35.52
+      - hostnames:
+        - hadoop--2.novalocal
+        ip: 10.16.32.255
+      - hostnames:
+        - hadoop--4.novalocal
+        ip: 10.16.32.254
+      - hostnames:
+        - hadoop--5.novalocal
+        ip: 10.16.35.213
+      - hostnames:
+        - hadoop--6.novalocal
+        ip: 10.16.33.47
+      restartPolicy: Always

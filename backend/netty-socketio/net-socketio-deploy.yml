@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: net-socketio-server
+  name: netty-socketio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: net-socketio-server
+  template:
+    metadata:
+      labels:
+        app: net-socketio-server
+    spec:
+      containers:
+      - env:
+        - name: JVM_OPTS
+          value: "-XX:+UseG1GC -XX:+PrintGCDetails -Xmn2048m -Xms2G -Xmx4G  -XX:MetaspaceSize=256M -XX:MaxMetaspaceSize=256M"
+        - name: com.alibaba.nacos.naming.log.level
+          value: warn
+        - name: spring.profiles.active
+          value: test
+        image: 10.16.32.59:1180/library/netty-socketio:V35
+        imagePullPolicy: Always
+        name: netty-socketio
+        ports:
+        - containerPort: 9091
+          name: 9091tcp01
+          protocol: TCP
+        - containerPort: 9090
+          name: 9090tcp01
+          protocol: TCP

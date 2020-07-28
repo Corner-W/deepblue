@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: autonlp-server
+  name: autonlp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: autonlp-server
+  template:
+    metadata:
+      labels:
+        app: autonlp-server
+    spec:
+      containers:
+      - env:
+        - name: JVM_OPTS
+          value: "-XX:+UseG1GC -Xmn2048m -Xms4G -Xmx4G  -XX:MetaspaceSize=512M -XX:MaxMetaspaceSize=512M"
+        - name: com.alibaba.nacos.naming.log.level
+          value: warn
+        - name: spring.profiles.active
+          value: test
+        - name: spring.redis.model
+          value: single
+        image: 10.16.32.59:1180/library/autonlp:V248
+        imagePullPolicy: Always
+        name: autonlp
+        ports:
+        - containerPort: 8086
+          name: 8086tcp01
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "4"
+            memory: 4000Mi
+      dnsPolicy: ClusterFirst
+      hostAliases:
+      - hostnames:
+        - hadoop--1.novalocal
+        ip: 10.16.35.52
+      - hostnames:
+        - hadoop--2.novalocal
+        ip: 10.16.32.255
+      - hostnames:
+        - hadoop--4.novalocal
+        ip: 10.16.32.254
+      - hostnames:
+        - hadoop--5.novalocal
+        ip: 10.16.35.213
+      - hostnames:
+        - hadoop--6.novalocal
+        ip: 10.16.33.47
+      restartPolicy: Always
+

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kubernetes-server
+  name: kubernetes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubernetes-server
+  template:
+    metadata:
+      labels:
+        app: kubernetes-server
+    spec:
+      containers:
+      - env:
+        - name: JVM_OPTS
+          value: "-XX:+UseG1GC -XX:+PrintGCDetails -Xmn2048m -Xms4G -Xmx4G  -XX:MetaspaceSize=256M -XX:MaxMetaspaceSize=256M"
+        - name: com.alibaba.nacos.naming.log.level
+          value: warn
+        - name: spring.profiles.active
+          value: test
+        image: 10.16.32.59:1180/library/kubernetes:V32
+        imagePullPolicy: Always
+        name: kubernetes

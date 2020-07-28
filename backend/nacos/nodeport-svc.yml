@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: nacos-nodeport
+  labels:
+    app: nacos
+spec:
+  selector:
+    app: nacos
+  type: LoadBalancer
+  ports:
+    - port: 8848
+      nodePort: 30054
+      name: extern

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: upload-server
+  name: upload
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: upload-server
+  template:
+    metadata:
+      labels:
+        app: upload-server
+    spec:
+      containers:
+      - env:
+        - name: JVM_OPTS
+          value: "-XX:+UseG1GC -XX:+PrintGCDetails -Xmn2048m -Xms2G -Xmx4G  -XX:MetaspaceSize=256M -XX:MaxMetaspaceSize=256M"
+        - name: com.alibaba.nacos.naming.log.level
+          value: warn
+        - name: spring.profiles.active
+          value: test
+        image: 10.16.32.59:1180/library/upload:V17
+        imagePullPolicy: Always
+        name: upload
+        ports:
+        - containerPort: 8000
+          name: 8000tcp01
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "4"
+            memory: 4000Mi
+        volumeMounts:
+        - mountPath: /home/upload
+          name: vol1
+      restartPolicy: Always
+      volumes:
+      - hostPath:
+          path: /home/upload
+          type: ""
+        name: vol1

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: datamarker-server
+  name: datamarker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: datamarker-server
+  template:
+    metadata:
+      labels:
+        app: datamarker-server
+    spec:
+      containers:
+      - env:
+        - name: JVM_OPTS
+          value: "-XX:+UseG1GC -XX:+PrintGCDetails -Xmn1024m -Xms2G -Xmx2G  -XX:MetaspaceSize=256M -XX:MaxMetaspaceSize=256M"
+        - name: spring.profiles.active
+          value: test
+        - name: spring.redis.model
+          value: single
+        image: 10.16.32.59:1180/library/data-marker:V122
+        imagePullPolicy: Always
+        name: datamarker
+        resources:
+          limits:
+            cpu: "4"
+            memory: 4000Mi

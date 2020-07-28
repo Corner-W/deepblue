@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kongclient-server
+  name: kongclient
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kongclient-server
+  template:
+    metadata:
+      labels:
+        app: kongclient-server
+    spec:
+      containers:
+      - env:
+        - name: JVM_OPTS
+          value: "-XX:+UseG1GC -XX:+PrintGCDetails -Xmn2048m -Xms4G -Xmx4G  -XX:MetaspaceSize=256M -XX:MaxMetaspaceSize=256M"
+        - name: com.alibaba.nacos.naming.log.level
+          value: warn
+        - name: spring.profiles.active
+          value: test
+        image: 10.16.32.59:1180/library/kongclient:V32
+        imagePullPolicy: Always
+        name: kongclient
+

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: gateway-server
+  name: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-server
+  template:
+    metadata:
+      labels:
+        app: gateway-server
+    spec:
+      containers:
+      - env:
+        - name: JVM_OPTS
+          value: "-XX:+UseG1GC -XX:+PrintGCDetails -Xmn2048m -Xms4G -Xmx4G  -XX:MetaspaceSize=256M -XX:MaxMetaspaceSize=256M"
+        - name: com.alibaba.nacos.naming.log.level
+          value: warn
+        - name: spring.profiles.active
+          value: test
+        - name: spring.redis.model
+          value: single
+        image: 10.16.32.59:1180/library/gateway:V82
+        imagePullPolicy: Always
+        name: gateway
+        ports:
+        - containerPort: 8080
+          name: 8080tcp301821
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "4"
+            memory: 4000Mi
+      restartPolicy: Always
+

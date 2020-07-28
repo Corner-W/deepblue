@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: auto-server
+  name: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auto-server
+  template:
+    metadata:
+      labels:
+        app: auto-server
+    spec:
+      containers:
+      - env:
+        - name: JVM_OPTS
+          value: "-XX:+UseG1GC -XX:+PrintGCDetails -Xmn2048m -Xms4G -Xmx4G  -XX:MetaspaceSize=256M -XX:MaxMetaspaceSize=256M"
+        - name: com.alibaba.nacos.naming.log.level
+          value: "warn"
+        - name: spring.profiles.active
+          value: "test"
+        - name: spring.redis.model
+          value: "single"
+        image: 10.16.32.59:1180/library/authentication:V91
+        imagePullPolicy: Always
+        name: auth
+        resources:
+          limits:
+            cpu: "4"
+            memory: 4000Mi
