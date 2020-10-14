@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: aiplatform-server
+  name: aiplatform-web
+  namespace: component
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aiplatform-server
+  template:
+    metadata:
+      labels:
+        app: aiplatform-server
+    spec:
+      containers:
+      - image: ccr.ccs.tencentyun.com/deepblue/nginx-aiplatform-runtime:arm64
+        imagePullPolicy: Always
+        name: aiplatform-web
+        ports:
+        - containerPort: 443
+          name: test
+          protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: aiplatform-server
+  namespace: component
+  labels:
+    app: aiplatform-server
+spec:
+  selector:
+    app: aiplatform-server
+  clusterIP: None
+  ports:
+    - port: 443
+      name: inner
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: aiplatform-nodeport
+  labels:
+    app: aiplatform-server
+spec:
+  selector:
+    app: aiplatform-server
+  type: LoadBalancer
+  ports:
+    - port: 443
+      nodePort: 30005
+      name: extern

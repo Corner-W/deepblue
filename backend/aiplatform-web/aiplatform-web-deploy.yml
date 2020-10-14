@@ -24,7 +24,11 @@ spec:
           value: "test"
         - name: spring.redis.model
           value: "single"
-        image: 10.16.32.59:1180/library/aiplatform_web:V121
+        - name: spring.cloud.nacos.discovery.server-addr
+          value: "nacos-server.component:8848"
+        - name: spring.cloud.nacos.config.server-addr
+          value: "nacos-server.component:8848"                      
+        image: ccr.ccs.tencentyun.com/deepblue/aiplatform-web:v1
         imagePullPolicy: Always
         name: aiplatform-web
         resources:

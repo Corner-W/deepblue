@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nacos
+  namespace: component
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nacos
+  serviceName: nacos-server
+  template:
+    metadata:
+      labels: 
+        app: nacos
+    spec:
+      containers:
+      - name: nacos
+        image: ccr.ccs.tencentyun.com/deepblue/nacos:arm64_1.2.1-skywalkingagent-6.1.0
+        ports:
+        - name: inner
+          containerPort: 8848
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "2"           
+          requests:
+            cpu: "2"
+            memory: "4Gi"
+        env:
+        - name: MODE
+          value: "standalone"
+        - name: NACOS_REPLICAS
+          value: "3"
+        - name: SERVICE_NAME
+          value: "nacos-server"
+        - name: DOMAIN_NAME
+          value: "cluster.local"
+        - name: POD_NAMESPACE
+          value: "component"
+        - name: MYSQL_SERVICE_HOST
+          value: "mysql-57.component"
+        - name: MYSQL_SERVICE_DB_NAME
+          value: "nacos"
+        - name: MYSQL_SERVICE_PASSWORD
+          value: "deepblue2019"
+        - name: MYSQL_SERVICE_PORT
+          value: "3306"
+        - name: MYSQL_SERVICE_USER
+          value: "root"
+        - name: NACOS_SERVER_PORT
+          value: "8848"
+        - name: NACOS_APPLICATION_PORT
+          value: "8848"
+        - name: PREFER_HOST_MODE
+          value: "hostname"
+        - name: SPRING_DATASOURCE_PLATFORM
+          value: "mysql"
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: nacos-server
+  namespace: component
+  labels:
+    app: nacos
+spec:
+  selector:
+    app: nacos
+  clusterIP: None
+  ports:
+    - port: 8848
+      name: inner
